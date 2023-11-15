@@ -1,15 +1,19 @@
 os.loadAPI("bundleAPI")
+
+local input = "right"
+local output = "back"
+
 function getCurrentFloor()
     local floor
-    if bundleAPI.getInput("right", "white") then
+    if bundleAPI.getInput(input, "white") then
         floor = 1
-    elseif bundleAPI.getInput("right", "orange") then
+    elseif bundleAPI.getInput(input, "orange") then
         floor = 2
-    elseif bundleAPI.getInput("right", "magenta") then
+    elseif bundleAPI.getInput(input, "magenta") then
         floor = 3
-    elseif bundleAPI.getInput("right", "lightblue") then
+    elseif bundleAPI.getInput(input, "lightblue") then
         floor = 4
-    elseif bundleAPI.getInput("right", "yellow") then
+    elseif bundleAPI.getInput(input, "yellow") then
         floor = 5
     else
         floor = nil
@@ -17,28 +21,28 @@ function getCurrentFloor()
     return floor
 end
 function pulseUP()
-    bundleAPI.on("back", "orange")
+    bundleAPI.on(output, "orange")
     os.sleep(0.25)
-    bundleAPI.off("back", "orange")
+    bundleAPI.off(output, "orange")
 end
 function pulseDN()
-    bundleAPI.on("back", "white")
+    bundleAPI.on(output, "white")
     os.sleep(0.25)
-    bundleAPI.off("back", "white")
+    bundleAPI.off(output, "white")
 end
 function GoToFloor(n)
     --explictly ask it to go to a floor, this wont do any b4hand checks!
     local floor
     local colour
-    if bundleAPI.getInput("right", "white") then
+    if bundleAPI.getInput(input, "white") then
         floor = 1
-    elseif bundleAPI.getInput("right", "orange") then
+    elseif bundleAPI.getInput(input, "orange") then
         floor = 2
-    elseif bundleAPI.getInput("right", "magenta") then
+    elseif bundleAPI.getInput(input, "magenta") then
         floor = 3
-    elseif bundleAPI.getInput("right", "lightblue") then
+    elseif bundleAPI.getInput(input, "lightblue") then
         floor = 4
-    elseif bundleAPI.getInput("right", "yellow") then
+    elseif bundleAPI.getInput(input, "yellow") then
         floor = 5
     else
         floor = nil
@@ -65,13 +69,13 @@ function GoToFloor(n)
     --the following first checks if IsHigher is True, so if it is, it will --then run a while statement which then pushes the lift down, when it --is satisfied just see above for logic it should break
     print(IsHigher)
     if IsHigher == true then
-        while not bundleAPI.getInput("right", colour) do
-            bundleAPI.pulse("back", "orange", 0.5)
+        while not bundleAPI.getInput(input, colour) do
+            bundleAPI.pulse(output, "orange", 0.5)
             os.sleep(0.5)
         end
     elseif IsHigher == false then
-        while not bundleAPI.getInput("right", colour) do
-            bundleAPI.pulse("back", "white", 1)
+        while not bundleAPI.getInput(input, colour) do
+            bundleAPI.pulse(output, "white", 1)
             os.sleep(0.5)
         end
     end
@@ -82,16 +86,16 @@ function doorCycle()
     local doorClose = "magenta"
     local anyDoorOpen = "magenta"
     for cycles = 0, 2 do
-        bundleAPI.on("back", doorOpen)
+        bundleAPI.on(output, doorOpen)
         os.sleep(0.25)
-        bundleAPI.off("back", doorOpen)
+        bundleAPI.off(output, doorOpen)
         os.sleep(0.25)
     end
     os.sleep(5) -- wait with door open
-    while bundleAPI.getInput("right", anyDoorOpen) do
-        bundleAPI.on("back", doorClose)
+    while bundleAPI.getInput(input, anyDoorOpen) do
+        bundleAPI.on(output, doorClose)
         os.sleep(0.25)
-        bundleAPI.off("back", doorClose)
+        bundleAPI.off(output, doorClose)
         os.sleep(0.25)
     end
 end
@@ -100,15 +104,15 @@ end
 
 function CheckForPosIfNotTryCalib()
     local floor
-    if bundleAPI.getInput("right", "white") then
+    if bundleAPI.getInput(input, "white") then
         floor = 1
-    elseif bundleAPI.getInput("right", "orange") then
+    elseif bundleAPI.getInput(input, "orange") then
         floor = 2
-    elseif bundleAPI.getInput("right", "magenta") then
+    elseif bundleAPI.getInput(input, "magenta") then
         floor = 3
-    elseif bundleAPI.getInput("right", "lightblue") then
+    elseif bundleAPI.getInput(input, "lightblue") then
         floor = 4
-    elseif bundleAPI.getInput("right", "yellow") then
+    elseif bundleAPI.getInput(input, "yellow") then
         floor = 5
     else
         floor = nil
@@ -119,17 +123,17 @@ function CheckForPosIfNotTryCalib()
         local floora
         while true do
             print("Loop down")
-            bundleAPI.pulse("back", "white", 0.5)
+            bundleAPI.pulse(output, "white", 0.5)
             os.sleep(1)
-            if bundleAPI.getInput("right", "white") then
+            if bundleAPI.getInput(input, "white") then
                 floora = 1
-            elseif bundleAPI.getInput("right", "orange") then
+            elseif bundleAPI.getInput(input, "orange") then
                 floora = 2
-            elseif bundleAPI.getInput("right", "magenta") then
+            elseif bundleAPI.getInput(input, "magenta") then
                 floora = 3
-            elseif bundleAPI.getInput("right", "lightblue") then
+            elseif bundleAPI.getInput(input, "lightblue") then
                 floora = 4
-            elseif bundleAPI.getInput("right", "yellow") then
+            elseif bundleAPI.getInput(input, "yellow") then
                 floora = 5
             else
                 floora = nil
@@ -146,13 +150,13 @@ function CheckForPosIfNotTryCalib()
 end
 function SafetyCheck()
     print("Checking Safety ")
-    if bundleAPI.getInput("right","lime") then
+    if bundleAPI.getInput(input,"lime") then
         print("Uh-oh! Seems like we have no safety. Perhaps a door is open? I will try to close it!")
         for i = 1, 3 do
-            bundleAPI.pulse("back","magenta",0.5)
+            bundleAPI.pulse(output,"magenta",0.5)
             os.sleep(0.5) 
         end
-        if bundleAPI.getInput("right","lime") then
+        if bundleAPI.getInput(input,"lime") then
             print("Seems like safety hasn't connected yet, please call bkj support for further assistance.")
             error("noSafety")
         else
