@@ -144,3 +144,19 @@ function CheckForPosIfNotTryCalib()
         print("Calibration not needed")
     end
 end
+function SafetyCheck()
+    print("Checking Safety ")
+    if bundleAPI.getInput("right","lime") then
+        print("Uh-oh! Seems like we have no safety. Perhaps a door is open? I will try to close it!")
+        for i = 1, 3 do
+            bundleAPI.pulse("back","magenta",0.5)
+            os.sleep(0.5) 
+        end
+        if bundleAPI.getInput("right","lime") then
+            print("Seems like safety hasn't connected yet, please call bkj support for further assistance.")
+            error("noSafety")
+        else
+            print("Safety has been connected now!")
+        end
+    end
+end
