@@ -8,3 +8,5 @@ The reasons of using a old version is mainly because the original mod developer 
 
 Keep in mind if you want to run this code, it's highly undocumented, and not at all re-configurable depending on how you set it up. I shall put a World download which is more convinient sometime in the future.
 
+In the meantime, feel free totally to bug me about how slow this project is and I would be amazed if I even made any changes than adding this very line. 
+
