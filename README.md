@@ -6,7 +6,11 @@ But anyways, in case you DON'T... this is a project where I create a elevator/li
 
 The reasons of using a old version is mainly because the original mod developer lost interest, and the re-creations of the RedPower mod wasn't the best in the late versions. 
 
-Keep in mind if you want to run this code, it's highly undocumented, and not at all re-configurable depending on how you set it up. I shall put a World download which is more convinient sometime in the future.
+Keep in mind if you want to run this code, it's highly undocumented, and not easily re-configurable. I shall put a World download which is more convinient sometime in the future.
 
 In the meantime, feel free totally to bug me about how slow this project is and I would be amazed if I even made any changes than adding this very line. 
+
+Update: The elevator now actually functions to a decent amount. I am happy as is really. Big achievement for me, however, obviously, this is not the end.
+
+More advanced scheduling can be added with even directions. 
 
