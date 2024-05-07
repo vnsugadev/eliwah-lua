@@ -14,3 +14,4 @@ Update: The elevator now actually functions to a decent amount. I am happy as is
 
 More advanced scheduling can be added with even directions. 
 
+For the World Download: Please use Tekkit Classic 3.12. And in case you are not near the creation, please teleport to -406, 64, 252
