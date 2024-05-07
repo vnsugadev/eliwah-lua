@@ -6,7 +6,7 @@ print("Made with Piss & Love and shit")
 print("Checking Safety....")
 bkjapi.SafetyCheck()
 print("Checking for Floor position...")
-bkjapi.CheckForPosIfNotTryCalib()
+parallel.waitForAll(bkjapi.CheckForPosIfNotTryCalib,bkjapi.BusyFlash)
 print("Running main loop...")
 while true do
     local function AWAITAcceptCabCallsWhileDoor()
@@ -16,15 +16,20 @@ while true do
     -- below function is when everything is idling, and we accept a landing call provoked from the outside, so we make sure we forward this and do something else, so we make justarrived at landing one
     local returnVal = bkjapi.AcceptLandCalls()
     if returnVal then
+	 print("This is value of returnVal",returnVal)
+	 print("This is the func output of acceptlandcals", bkjapi.AcceptLandCalls())
    	 sleep(0.75)
    	 bkjapi.Busy(true)
+   	 print("Next func is here")
    	 bkjapi.GoToFloor(returnVal)
    	 parallel.waitForAll(bkjapi.doorCycle, AWAITAcceptCabCallsWhileDoor)
    	 if xyz then
+		 print("xyz 123 is executed")
    		 bkjapi.Busy(true)
    		 bkjapi.GoToFloor(xyz)
    		 bkjapi.doorCycle()
    		 bkjapi.Busy()
+   		 else bkjapi.Busy()
    	 end
     end
     -- below function is when everything is idling, and we get a call from inside the cab
@@ -42,6 +47,8 @@ while true do
    	 bkjapi.Busy()
     end
     -- see somewhere above, but when just arrived landing is one, itmeans a user from outside called, so we open the doors, and we also accept input at the same time. in case the user isnt input anything or needs more time or didnt enter the lift, the lift is unbusy at this time and goes back to its normal running loop.
+
+
 end
 
 
