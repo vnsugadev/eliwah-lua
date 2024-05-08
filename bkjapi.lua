@@ -1,4 +1,11 @@
 os.loadAPI("bundleAPI")
+function InspSafe()
+    sleep(0.1)
+    if bundleAPI.getInput("right", "lime") then
+        error("SafetyNotConnected!!")
+    end
+end
+
 function getCurrentFloor()
     local floor
     if bundleAPI.getInput("right", "white") then
@@ -43,11 +50,14 @@ function GoToFloor(n)
     else
         floor = nil
     end
-    print(n)
-    print(floor)
+    print("Value of N : ", n)
+    print("Value of cureent floor: ", floor)
+    if not floor then
+        error("NotCalibrated")
+    end
     if n > floor then
         IsHigher = true
-    else
+    elseif n < floor then
         IsHigher = false
     end
     --need to assignn number back to color
@@ -66,13 +76,21 @@ function GoToFloor(n)
     print(IsHigher)
     if IsHigher == true then
         while not bundleAPI.getInput("right", colour) do
+            local suc, err = pcall(InspSafe)
+            if err then
+                error(123)
+            end
             bundleAPI.pulse("back", "orange", 0.5)
-            os.sleep(0.5)
+            sleep(0.5)
         end
     elseif IsHigher == false then
         while not bundleAPI.getInput("right", colour) do
+            local suc, err = pcall(InspSafe)
+            if err then
+                error(123)
+            end
             bundleAPI.pulse("back", "white", 1)
-            os.sleep(0.5)
+            sleep(0.5)
         end
     end
 end
@@ -102,7 +120,7 @@ end
 -- will update again geez
 
 function CheckForPosIfNotTryCalib()
-    BusyFlashBulb=true
+    BusyFlashBulb = true
     local floor
     if bundleAPI.getInput("right", "white") then
         floor = 1
@@ -142,7 +160,7 @@ function CheckForPosIfNotTryCalib()
             print("This is floora ", floora)
             if floora == 5 or floora == 4 or floora == 3 or floora == 2 or floora == 1 then
                 print("Break!")
-                BusyFlashBulb=false
+                BusyFlashBulb = false
                 break
             end
         end
@@ -235,8 +253,6 @@ function BusyFlash()
     end
 end
 
-
-
 function JustArrivedLandCall()
     doorCycle()
     Busy()
@@ -247,18 +263,18 @@ end
 
 function AcceptCabCallsOpen()
     local cabCallA
-        sleep(0.1)
-        if bundleAPI.getInput("right", "pink") then
-            cabCallA = 1
-        elseif bundleAPI.getInput("right", "gray") then
-            cabCallA = 2
-        elseif bundleAPI.getInput("right", "lightGray") then
-            cabCallA = 3
-        elseif bundleAPI.getInput("right", "cyan") then
-            cabCallA = 4
-        elseif bundleAPI.getInput("right", "purple") then
-            cabCallA = 5
-        end
+    sleep(0.1)
+    if bundleAPI.getInput("right", "pink") then
+        cabCallA = 1
+    elseif bundleAPI.getInput("right", "gray") then
+        cabCallA = 2
+    elseif bundleAPI.getInput("right", "lightGray") then
+        cabCallA = 3
+    elseif bundleAPI.getInput("right", "cyan") then
+        cabCallA = 4
+    elseif bundleAPI.getInput("right", "purple") then
+        cabCallA = 5
+    end
     if cabCallA == nil then
         return nil
     else
