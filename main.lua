@@ -230,7 +230,7 @@ logic = function()
     end
   end
 end
-scheduler.add_task(readCalls)
-scheduler.add_task(logic)
+scheduler.start(readCalls)
+scheduler.start(logic)
 print('Elevator ready for service')
 return scheduler.run()
