@@ -6,6 +6,9 @@
 -- including the optional argument. That is, in particular, why spinning the VM
 -- without a pullEvent produces an error "too long without yielding".
 
+-- A compatibility replacement for table.pack
+pack = (...) -> {..., n: select('#', ...)}
+
 tasks = {}  -- global task table
 export getTasks = -> tasks
 
@@ -35,7 +38,7 @@ export invoke = (task, ...) ->
 		onError task, result[1]
 		return
 	if coroutine.status(task) == 'dead'
-		onFinish task, table.unpack(result)
+		onFinish task, unpack(result)
 		return
 	-- non-terminal state, keep going
 	filter = result[1]  -- optional as per CC ABI
@@ -56,7 +59,7 @@ export stop = -> running = false
 export run = ->
 	running = true
 	while running
-		event = table.pack(os.pullEventRaw())
+		event = pack(os.pullEventRaw())
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
-				invoke task, table.unpack(event, 1, event.n)
+				invoke task, unpack(event, 1, event.n)
