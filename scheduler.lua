@@ -1,3 +1,10 @@
+local pack
+pack = function(...)
+  return {
+    ...,
+    n = select('#', ...)
+  }
+end
 local tasks = { }
 getTasks = function()
   return tasks
@@ -37,7 +44,7 @@ invoke = function(task, ...)
     return 
   end
   if coroutine.status(task) == 'dead' then
-    onFinish(task, table.unpack(result))
+    onFinish(task, unpack(result))
     return 
   end
   local filter = result[1]
@@ -57,10 +64,10 @@ end
 run = function()
   running = true
   while running do
-    local event = table.pack(os.pullEventRaw())
+    local event = pack(os.pullEventRaw())
     for task, filter in pairs(tasks) do
       if filter == true or event[1] == filter or event[1] == 'terminate' then
-        invoke(task, table.unpack(event, 1, event.n))
+        invoke(task, unpack(event, 1, event.n))
       end
     end
   end
