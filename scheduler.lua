@@ -5,6 +5,27 @@ pack = function(...)
     n = select('#', ...)
   }
 end
+local concatStr
+concatStr = function(t, sep, i, j)
+  if sep == nil then
+    sep = ''
+  end
+  if i == nil then
+    i = 1
+  end
+  if j == nil then
+    j = #t
+  end
+  local mapped
+  do
+    local _tbl_0 = { }
+    for x = i, j do
+      _tbl_0[x] = tostring(t[x])
+    end
+    mapped = _tbl_0
+  end
+  return table.concat(mapped, sep, i, j)
+end
 local tasks = { }
 local names = setmetatable({ }, {
   __mode = 'k'
@@ -84,7 +105,7 @@ run = function()
   while running do
     local event = pack(os.pullEventRaw())
     if debugging then
-      print("sched: event " .. tostring(table.concat(event, ', ', 1, event.n)))
+      print("sched: event " .. tostring(concatStr(event, ', ', 1, event.n)))
     end
     for task, filter in pairs(tasks) do
       if filter == true or event[1] == filter or event[1] == 'terminate' then

@@ -8,6 +8,9 @@
 
 -- A compatibility replacement for table.pack
 pack = (...) -> {..., n: select('#', ...)}
+concatStr = (t, sep = '', i = 1, j = #t) ->
+	mapped = {x, tostring t[x] for x = i, j}
+	table.concat mapped, sep, i, j
 
 tasks = {}  -- global task table
 names = setmetatable {}, {__mode: 'k'}  -- Task names
@@ -72,7 +75,7 @@ export run = ->
 	running = true
 	while running
 		event = pack(os.pullEventRaw())
-		print "sched: event #{table.concat event, ', ', 1, event.n}" if debugging
+		print "sched: event #{concatStr event, ', ', 1, event.n}" if debugging
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
 				print "sched: task #{getName task} receives #{event[1]}" if debugging
