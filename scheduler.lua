@@ -78,17 +78,17 @@ local running = true
 stop = function()
   running = false
 end
-debug = false
+debugging = true
 run = function()
   running = true
   while running do
     local event = pack(os.pullEventRaw())
-    if debug then
+    if debugging then
       print("sched: event " .. tostring(table.concat(event, ', ', 1, event.n)))
     end
     for task, filter in pairs(tasks) do
       if filter == true or event[1] == filter or event[1] == 'terminate' then
-        if debug then
+        if debugging then
           print("sched: task " .. tostring(getName(task)) .. " receives " .. tostring(event[1]))
         end
         invoke(task, unpack(event, 1, event.n))

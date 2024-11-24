@@ -65,15 +65,15 @@ running = true
 -- stop any running scheduler
 export stop = -> running = false
 
-export debug = false
+export debugging = true
 
 -- run the scheduler; this doesn't return until stop() is called
 export run = ->
 	running = true
 	while running
 		event = pack(os.pullEventRaw())
-		print "sched: event #{table.concat event, ', ', 1, event.n}" if debug
+		print "sched: event #{table.concat event, ', ', 1, event.n}" if debugging
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
-				print "sched: task #{getName task} receives #{event[1]}" if debug
+				print "sched: task #{getName task} receives #{event[1]}" if debugging
 				invoke task, unpack(event, 1, event.n)
