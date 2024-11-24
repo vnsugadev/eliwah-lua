@@ -8,7 +8,7 @@
 
 -- A compatibility replacement for table.pack
 pack = (...) ->
-	print "pack: n=#{select('#', ...)}"
+	print "pack: n=#{select('#', ...)} 1=#{select(1, ...)} 2=#{select(2, ...)} 3=#{select(..., 3)}"
 	{..., n: select('#', ...)}
 concatStr = (t, sep = '', i = 1, j = #t) ->
 	mapped = {x, tostring t[x] for x = i, j}
