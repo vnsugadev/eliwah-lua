@@ -1,10 +1,10 @@
 local pack
 pack = function(...)
-  print("pack: n=" .. tostring(select('#', ...)) .. " 1=" .. tostring(select(1, ...)) .. " 2=" .. tostring(select(2, ...)) .. " 3=" .. tostring(select(..., 3)))
-  return {
-    ...,
-    n = select('#', ...)
+  local t = {
+    ...
   }
+  t.n = select('#', ...)
+  return t
 end
 local concatStr
 concatStr = function(t, sep, i, j)
@@ -106,7 +106,7 @@ run = function()
   while running do
     local event = pack(os.pullEventRaw())
     if debugging then
-      print("sched: event (n=" .. tostring(event.n) .. ", 1=" .. tostring(event[1]) .. ", 2=" .. tostring(event[2]) .. ") " .. tostring(concatStr(event, ', ', 1, event.n)))
+      print("sched: event " .. tostring(concatStr(event, ', ', 1, event.n)))
     end
     for task, filter in pairs(tasks) do
       if filter == true or event[1] == filter or event[1] == 'terminate' then

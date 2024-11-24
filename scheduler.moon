@@ -8,8 +8,9 @@
 
 -- A compatibility replacement for table.pack
 pack = (...) ->
-	print "pack: n=#{select('#', ...)} 1=#{select(1, ...)} 2=#{select(2, ...)} 3=#{select(..., 3)}"
-	{..., n: select('#', ...)}
+	t = {...}
+	t.n = select('#', ...)
+	t
 concatStr = (t, sep = '', i = 1, j = #t) ->
 	mapped = {x, tostring t[x] for x = i, j}
 	table.concat mapped, sep, i, j
@@ -77,7 +78,7 @@ export run = ->
 	running = true
 	while running
 		event = pack os.pullEventRaw!
-		print "sched: event (n=#{event.n}, 1=#{event[1]}, 2=#{event[2]}) #{concatStr event, ', ', 1, event.n}" if debugging
+		print "sched: event #{concatStr event, ', ', 1, event.n}" if debugging
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
 				print "sched: task #{getName task} receives #{event[1]}" if debugging
