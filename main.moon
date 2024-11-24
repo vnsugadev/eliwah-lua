@@ -71,6 +71,7 @@ pulse = (dir) ->
 unsafe = -> rs.getBundledInput rs_input, safety
 
 goToFloor = (floor) ->
+	print "goToFloor #{floor}"
 	sense = assert floors[floor], "attempt to go to unknown floor #{floor}"
 	dir = if floor > last_floor then 'up' else 'down'
 	while getCurrentFloor! ~= floor
@@ -82,11 +83,13 @@ goToFloor = (floor) ->
 	true, floor
 
 setDoor = (open) ->
+	print "setDoor #{open}"
 	line = if open then 'open' else 'close'
 	for i = 1, door_width
 		pulse line
 
 setCallLamp = (on) ->
+	print "setCallLamp #{on}"
 	func = if on then rs_on else rs_off
 	func rs_output, output.call
 
@@ -96,14 +99,17 @@ preference = nil
 readCalls = ->
 	while true
 		os.pullEvent 'redstone'
+		print 'readCalls: event'
 		for floor, colors in ipairs calls
 			for _, color in ipairs colors
 				if rs.testBundledInput rs_input, color
 					calls[floor] = true
+					print "readCalls: set call on #{floor} given #{colors[color]}"
 					os.queueEvent 'elevator_called'
 					setCallLamp true
 
 resetCalls = ->
+	print 'resetCalls'
 	while next calls
 		calls[next calls] = nil
 
@@ -132,15 +138,19 @@ bestFloor = ->
 
 logic = ->
 	while true
+		print 'logic: initial state'
 		-- Initially, open the door and wait for a call
 		preference = nil
 		setDoor true
 		setCallLamp false
 		os.pullEvent 'elevator_called'
+		print 'logic: called'
 
 		while next calls  -- inner loop to hold on to preference while multiple calls are outstanding
+			print 'logic: movement'
 			setDoor false
 			floor = assert bestFloor!, 'could not generate a floor to go to?'
+			print "logic: bestFloor! == #{floor}"
 			success, problem = goToFloor floor
 			setDoor true
 			unless success
@@ -150,6 +160,7 @@ logic = ->
 			unless next calls
 				-- eagerly clear the call lamp now; it can still be set by readCalls during the linger
 				setCallLamp false
+			print 'logic: wait'
 			sleep linger_time -- linger here for a bit
 			-- repeat inner loop while calls remain
 		-- fall to outer loop when no calls remain, clearing preference and idling
