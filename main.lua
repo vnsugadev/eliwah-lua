@@ -241,7 +241,8 @@ logic = function()
     end
   end
 end
-scheduler.start(readCalls)
-scheduler.start(logic)
+scheduler.setName(scheduler.start(readCalls), 'readCalls')
+scheduler.setName(scheduler.start(logic), 'logic')
+scheduler.debug = true
 print('Elevator ready for service')
 return scheduler.run()

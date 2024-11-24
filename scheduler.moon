@@ -10,7 +10,14 @@
 pack = (...) -> {..., n: select('#', ...)}
 
 tasks = {}  -- global task table
+names = setmetatable {}, {__mode: 'k'}  -- Task names
 export getTasks = -> tasks
+export getName = (task) ->
+	if name = names[task]
+		return name
+	'??'
+export setName = (task, name) ->
+	names[task] = name
 
 finish = {}  -- subscribers to a task ending
 export taskFinished = (task, ...) ->
@@ -48,18 +55,25 @@ export invoke = (task, ...) ->
 		tasks[task] = true
 
 -- start a task asynchronously; the task code runs immediately up to its first yield
-export start = (func, ...) -> invoke coroutine.create(func), ...
+export start = (func, ...) -> 
+	task = coroutine.create func
+	invoke task, ...
+	task
 
 running = true
 
 -- stop any running scheduler
 export stop = -> running = false
 
+export debug = false
+
 -- run the scheduler; this doesn't return until stop() is called
 export run = ->
 	running = true
 	while running
 		event = pack(os.pullEventRaw())
+		print "sched: event #{table.concat event, ', ', 1, event.n}" if debug
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
+				print "sched: task #{getName task} receives #{event[1]}" if debug
 				invoke task, unpack(event, 1, event.n)

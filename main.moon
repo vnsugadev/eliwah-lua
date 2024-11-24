@@ -165,8 +165,9 @@ logic = ->
 			-- repeat inner loop while calls remain
 		-- fall to outer loop when no calls remain, clearing preference and idling
 
-scheduler.start readCalls
-scheduler.start logic
+scheduler.setName scheduler.start(readCalls), 'readCalls'
+scheduler.setName scheduler.start(logic), 'logic'
+scheduler.debug = true
 
 print 'Elevator ready for service'
 scheduler.run!

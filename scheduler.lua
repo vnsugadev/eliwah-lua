@@ -6,8 +6,23 @@ pack = function(...)
   }
 end
 local tasks = { }
+local names = setmetatable({ }, {
+  __mode = 'k'
+})
 getTasks = function()
   return tasks
+end
+getName = function(task)
+  do
+    local name = names[task]
+    if name then
+      return name
+    end
+  end
+  return '??'
+end
+setName = function(task, name)
+  names[task] = name
 end
 local finish = { }
 taskFinished = function(task, ...)
@@ -55,18 +70,27 @@ invoke = function(task, ...)
   end
 end
 start = function(func, ...)
-  return invoke(coroutine.create(func), ...)
+  local task = coroutine.create(func)
+  invoke(task, ...)
+  return task
 end
 local running = true
 stop = function()
   running = false
 end
+debug = false
 run = function()
   running = true
   while running do
     local event = pack(os.pullEventRaw())
+    if debug then
+      print("sched: event " .. tostring(table.concat(event, ', ', 1, event.n)))
+    end
     for task, filter in pairs(tasks) do
       if filter == true or event[1] == filter or event[1] == 'terminate' then
+        if debug then
+          print("sched: task " .. tostring(getName(task)) .. " receives " .. tostring(event[1]))
+        end
         invoke(task, unpack(event, 1, event.n))
       end
     end
