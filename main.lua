@@ -87,6 +87,7 @@ unsafe = function()
 end
 local goToFloor
 goToFloor = function(floor)
+  print("goToFloor " .. tostring(floor))
   local sense = assert(floors[floor], "attempt to go to unknown floor " .. tostring(floor))
   local dir
   if floor > last_floor then
@@ -109,6 +110,7 @@ goToFloor = function(floor)
 end
 local setDoor
 setDoor = function(open)
+  print("setDoor " .. tostring(open))
   local line
   if open then
     line = 'open'
@@ -121,6 +123,7 @@ setDoor = function(open)
 end
 local setCallLamp
 setCallLamp = function(on)
+  print("setCallLamp " .. tostring(on))
   local func
   if on then
     func = rs_on
@@ -135,10 +138,12 @@ local readCalls
 readCalls = function()
   while true do
     os.pullEvent('redstone')
+    print('readCalls: event')
     for floor, colors in ipairs(calls) do
       for _, color in ipairs(colors) do
         if rs.testBundledInput(rs_input, color) then
           calls[floor] = true
+          print("readCalls: set call on " .. tostring(floor) .. " given " .. tostring(colors[color]))
           os.queueEvent('elevator_called')
           setCallLamp(true)
         end
@@ -148,6 +153,7 @@ readCalls = function()
 end
 local resetCalls
 resetCalls = function()
+  print('resetCalls')
   while next(calls) do
     calls[next(calls)] = nil
   end
@@ -209,13 +215,17 @@ end
 local logic
 logic = function()
   while true do
+    print('logic: initial state')
     preference = nil
     setDoor(true)
     setCallLamp(false)
     os.pullEvent('elevator_called')
+    print('logic: called')
     while next(calls) do
+      print('logic: movement')
       setDoor(false)
       local floor = assert(bestFloor(), 'could not generate a floor to go to?')
+      print("logic: bestFloor! == " .. tostring(floor))
       local success, problem = goToFloor(floor)
       setDoor(true)
       if not (success) then
@@ -226,6 +236,7 @@ logic = function()
       if not (next(calls)) then
         setCallLamp(false)
       end
+      print('logic: wait')
       sleep(linger_time)
     end
   end
