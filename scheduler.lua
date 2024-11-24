@@ -1,5 +1,6 @@
 local pack
 pack = function(...)
+  print("pack: n=" .. tostring(select('#', ...)))
   return {
     ...,
     n = select('#', ...)

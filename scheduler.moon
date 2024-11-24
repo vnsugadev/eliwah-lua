@@ -7,7 +7,9 @@
 -- without a pullEvent produces an error "too long without yielding".
 
 -- A compatibility replacement for table.pack
-pack = (...) -> {..., n: select('#', ...)}
+pack = (...) ->
+	print "pack: n=#{select('#', ...)}"
+	{..., n: select('#', ...)}
 concatStr = (t, sep = '', i = 1, j = #t) ->
 	mapped = {x, tostring t[x] for x = i, j}
 	table.concat mapped, sep, i, j
@@ -70,11 +72,11 @@ export stop = -> running = false
 
 export debugging = true
 
--- run the scheduler; this doesn't return until stop() is called
+-- run the scheduler; this doesn't return until stop! is called
 export run = ->
 	running = true
 	while running
-		event = pack(os.pullEventRaw())
+		event = pack os.pullEventRaw!
 		print "sched: event (n=#{event.n}, 1=#{event[1]}, 2=#{event[2]}) #{concatStr event, ', ', 1, event.n}" if debugging
 		for task, filter in pairs tasks
 			if filter == true or event[1] == filter or event[1] == 'terminate'
