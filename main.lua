@@ -6,7 +6,7 @@ local floors = {
   colors.lightBlue,
   colors.yellow
 }
-local calls = {
+local calls_in = {
   {
     colors.pink,
     colors.blue
@@ -132,14 +132,14 @@ setCallLamp = function(on)
   end
   return func(rs_output, output.call)
 end
-calls = { }
+local calls = { }
 local preference = nil
 local readCalls
 readCalls = function()
   while true do
     os.pullEvent('redstone')
     print('readCalls: event')
-    for floor, colors in ipairs(calls) do
+    for floor, colors in ipairs(calls_in) do
       for _, color in ipairs(colors) do
         if rs.testBundledInput(rs_input, color) then
           calls[floor] = true

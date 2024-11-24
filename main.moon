@@ -10,7 +10,7 @@ floors = {
 	colors.yellow,
 }
 -- sequence of sequences of colors corresponding to the call buttons in floor order
-calls = {
+calls_in = {
 	{colors.pink, colors.blue},
 	{colors.gray, colors.brown},
 	{colors.lightGray, colors.green},
@@ -100,7 +100,7 @@ readCalls = ->
 	while true
 		os.pullEvent 'redstone'
 		print 'readCalls: event'
-		for floor, colors in ipairs calls
+		for floor, colors in ipairs calls_in
 			for _, color in ipairs colors
 				if rs.testBundledInput rs_input, color
 					calls[floor] = true
