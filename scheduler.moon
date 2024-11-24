@@ -80,3 +80,5 @@ export run = ->
 			if filter == true or event[1] == filter or event[1] == 'terminate'
 				print "sched: task #{getName task} receives #{event[1]}" if debugging
 				invoke task, unpack(event, 1, event.n)
+			elseif debugging
+				print "sched: task #{getName task} rejected #{event[1]} due to filter #{filter}"

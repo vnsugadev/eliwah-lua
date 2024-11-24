@@ -113,6 +113,8 @@ run = function()
           print("sched: task " .. tostring(getName(task)) .. " receives " .. tostring(event[1]))
         end
         invoke(task, unpack(event, 1, event.n))
+      elseif debugging then
+        print("sched: task " .. tostring(getName(task)) .. " rejected " .. tostring(event[1]) .. " due to filter " .. tostring(filter))
       end
     end
   end
