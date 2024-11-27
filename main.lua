@@ -83,7 +83,7 @@ pulse = function(dir)
 end
 local unsafe
 unsafe = function()
-  return rs.getBundledInput(rs_input, safety)
+  return rs.testBundledInput(rs_input, safety)
 end
 local goToFloor
 goToFloor = function(floor)

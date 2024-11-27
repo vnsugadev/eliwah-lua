@@ -68,7 +68,7 @@ pulse = (dir) ->
 	rs_off rs_output, output[dir]
 	sleep pulse_width.off
 
-unsafe = -> rs.getBundledInput rs_input, safety
+unsafe = -> rs.testBundledInput rs_input, safety
 
 goToFloor = (floor) ->
 	print "goToFloor #{floor}"
