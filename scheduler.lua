@@ -100,7 +100,7 @@ local running = true
 stop = function()
   running = false
 end
-debugging = true
+debugging = false
 run = function()
   running = true
   while running do

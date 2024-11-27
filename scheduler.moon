@@ -71,7 +71,7 @@ running = true
 -- stop any running scheduler
 export stop = -> running = false
 
-export debugging = true
+export debugging = false
 
 -- run the scheduler; this doesn't return until stop! is called
 export run = ->

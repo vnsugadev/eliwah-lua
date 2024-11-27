@@ -143,7 +143,6 @@ logic = ->
 		preference = nil
 		setDoor true
 		setCallLamp false
-		print 'logic: ready for call'
 		os.pullEvent 'elevator_called'
 		print 'logic: called'
 
