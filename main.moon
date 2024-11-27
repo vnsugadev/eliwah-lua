@@ -33,6 +33,7 @@ output =
 pulse_width =
 	on: 0.25
 	off: 0.25
+safety_wait = 0.5
 door_width = 3
 linger_time = 8  -- seconds on a given floor
 
@@ -87,6 +88,7 @@ setDoor = (open) ->
 	line = if open then 'open' else 'close'
 	for i = 1, door_width
 		pulse line
+	sleep safety_wait
 	print "setDoor: unsafe = #{unsafe!}"
 	print 'setDoor: WARN: still unsafe!' if (not open) and unsafe!
 

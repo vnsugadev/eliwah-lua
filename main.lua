@@ -41,6 +41,7 @@ local pulse_width = {
   on = 0.25,
   off = 0.25
 }
+local safety_wait = 0.5
 local door_width = 3
 local linger_time = 8
 os.loadAPI('scheduler')
@@ -120,6 +121,7 @@ setDoor = function(open)
   for i = 1, door_width do
     pulse(line)
   end
+  sleep(safety_wait)
   print("setDoor: unsafe = " .. tostring(unsafe()))
   if (not open) and unsafe() then
     return print('setDoor: WARN: still unsafe!')
