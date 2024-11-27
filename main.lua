@@ -97,7 +97,7 @@ goToFloor = function(floor)
   end
   while getCurrentFloor() ~= floor do
     if unsafe() then
-      return false, 'ABORTED'
+      return false, 'ABORTED_UNSAFE'
     end
     pulse(dir)
     if floor > last_floor then
@@ -120,6 +120,10 @@ setDoor = function(open)
   for i = 1, door_width do
     pulse(line)
   end
+  print("setDoor: unsafe = " .. tostring(unsafe()))
+  if (not open) and unsafe() then
+    return print('setDoor: WARN: still unsafe!')
+  end
 end
 local setCallLamp
 setCallLamp = function(on)
@@ -138,7 +142,6 @@ local readCalls
 readCalls = function()
   while true do
     os.pullEvent('redstone')
-    print('readCalls: event')
     for floor, colors in ipairs(calls_in) do
       for _, color in ipairs(colors) do
         if rs.testBundledInput(rs_input, color) then

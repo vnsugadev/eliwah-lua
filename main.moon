@@ -75,7 +75,7 @@ goToFloor = (floor) ->
 	sense = assert floors[floor], "attempt to go to unknown floor #{floor}"
 	dir = if floor > last_floor then 'up' else 'down'
 	while getCurrentFloor! ~= floor
-		return false, 'ABORTED' if unsafe!
+		return false, 'ABORTED_UNSAFE' if unsafe!
 		pulse dir
 		-- just in case we made a bad guess about alignment, continuously rectify
 		-- our guess as to the direction of travel
@@ -87,6 +87,8 @@ setDoor = (open) ->
 	line = if open then 'open' else 'close'
 	for i = 1, door_width
 		pulse line
+	print "setDoor: unsafe = #{unsafe!}"
+	print 'setDoor: WARN: still unsafe!' if (not open) and unsafe!
 
 setCallLamp = (on) ->
 	print "setCallLamp #{on}"
@@ -99,7 +101,6 @@ preference = nil
 readCalls = ->
 	while true
 		os.pullEvent 'redstone'
-		print 'readCalls: event'
 		for floor, colors in ipairs calls_in
 			for _, color in ipairs colors
 				if rs.testBundledInput rs_input, color
