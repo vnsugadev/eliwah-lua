@@ -160,6 +160,7 @@ logic = ->
 				print "A movement error occurred: #{problem}; resetting all calls."
 				resetCalls!
 				break
+			calls[floor] = nil
 			unless next calls
 				-- eagerly clear the call lamp now; it can still be set by readCalls during the linger
 				setCallLamp false

@@ -238,6 +238,7 @@ logic = function()
         resetCalls()
         break
       end
+      calls[floor] = nil
       if not (next(calls)) then
         setCallLamp(false)
       end
